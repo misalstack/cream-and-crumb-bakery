@@ -1,14 +1,50 @@
-# Sweet Crust
+<div id='top' align="center">
 
-> *A Heart of Bakery in Africa*
+# 🧁 Crème & Crumb
 
-An online bakery for **Sweet Crust**, Kigali — customers browse breads, cakes and pastries,
-build a cart, and place an order for pickup or delivery. Staff manage the catalogue and
-incoming orders from a built-in admin area.
+### Premium Patisserie & Ordering Platform
 
-Built from the client's brief (`Sweet_Crust_Ecommerce_Website_Plan_Updated.pdf`): deep
-burgundy and champagne gold, blush and ivory supporting tones, a stylish display serif over
-clean body text, and large food photography throughout.
+An all-in-one modern e-commerce platform and management portal for luxury bakery and confectionery businesses. Built with **Next.js**, **TypeScript**, **Tailwind CSS**, **Prisma ORM**, and **PostgreSQL**.
+
+<p>
+  <a href="https://misalstack.netlify.app/case-study/cream-case-study"><strong>View Live Case Study »</strong></a>
+</p>
+
+<p>
+
+![Next.js](https://img.shields.io/badge/-Next.js-05122A?style=for-the-badge&logo=next.js)&nbsp;
+![TypeScript](https://img.shields.io/badge/-TypeScript-05122A?style=for-the-badge&logo=typescript)&nbsp;
+![Tailwind CSS](https://img.shields.io/badge/-TailwindCSS-05122A?style=for-the-badge&logo=tailwindCSS&logoColor=06B6D4)&nbsp;
+![Prisma](https://img.shields.io/badge/-Prisma-05122A?style=for-the-badge&logo=prisma)&nbsp;
+![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-05122A?style=for-the-badge&logo=postgresql)
+
+</p>
+
+## 🔗 Live Demo
+
+You can explore the live deployed platform here:
+👉 **[Crème & Crumb Live Storefront](https://weet-crust.vercel.app)**
+</div>
+
+---
+
+## 🔧 Technologies
+
+* **Framework:** Next.js (App Router, Server Actions)
+* **Language:** TypeScript
+* **Styling:** Tailwind CSS
+* **Database & ORM:** Prisma ORM with PostgreSQL & SQLite
+* **Typography & Design System:** Custom high-contrast theme (Cormorant Garamond, Parisienne, Inter)
+
+---
+
+## ✨ Key Features & Capabilities
+
+* 🎂 **Guided 4-Step Custom Cake Pipeline:** Seamless inquiry system capturing party size, budget, reference photos, custom messages, and baking vision (`Vision → Design → Confirmation → Baking`).
+* 🛒 **Category-Filtered Visual Showcase:** Dynamic catalog with multi-tier flavor menus across "The Bakery", "Pastries", and "Cakes".
+* 🔒 **Staff Back-Office Portal & Soft-Deletion:** Admin dashboard for complete menu management. Features soft-deletion logic (`isActive: false`) to discontinue products without corrupting historical sales records.
+* 💬 **Direct Order & WhatsApp Integration:** Inline contact and direct WhatsApp ordering routes allowing customers to discuss complex custom requests directly with staff.
+* 📱 **Responsive Multi-Step Order Processing:** Optimized for high engagement and flawless mobile/desktop ordering workflows.
 
 ---
 
@@ -32,10 +68,6 @@ npx prisma migrate dev && npx tsx prisma/seed.ts && npm run dev
 ```
 
 The site runs at **http://localhost:3002** (`npm run dev -- --port 3002`).
-
-Staff sign in at `/admin/login`. The seeded development account is
-`owner@sweetcrust.rw` / `sweetcrust123` — **change this before the site goes live**
-(see the checklist below).
 
 ### Other commands
 
@@ -72,15 +104,6 @@ Staff sign in at `/admin/login`. The seeded development account is
 - **Gallery** (`/gallery`) — filterable grid with a keyboard-navigable lightbox.
 - **Contact** (`/contact`) — address, hours, delivery zones, map, contact form and FAQs.
 
-**Admin** (`/admin`)
-
-Dashboard (orders due today, open orders, month revenue, things needing a reply),
-orders list with filters, order detail with a status dropdown, product create/edit with
-sizes and stock toggles, plus custom-cake and message inboxes.
-
-Order statuses run `Pending → Confirmed → In the oven → Ready → Out for delivery →
-Completed`, with `Cancelled` available at any point.
-
 ---
 
 ## How it's built
@@ -99,120 +122,3 @@ src/components/      UI primitives, cart, forms, admin widgets
 src/lib/             Data access, currency, validation, auth, bakery details
 ```
 
-A few decisions worth knowing:
-
-- **Prices are stored in RWF only.** USD is derived at render time from `RWF_PER_USD` in
-  `src/lib/currency.ts`; the visitor's choice lives in a `currency` cookie read on the
-  server. With 40-plus products one exchange rate is far less error-prone than maintaining
-  two prices per row. **Update that rate when it moves.**
-- **The cart is browser-only** (`localStorage`, no customer accounts), but **the server
-  re-prices every line from the database at checkout**. Prices in the browser are display
-  values and are never trusted.
-- **Forms are controlled.** React resets a form once a Server Action resolves, which
-  otherwise wipes what a customer typed on a validation error — and on checkout it silently
-  reverted delivery orders to pickup. See `src/components/forms/useFormFields.ts`.
-- **Order line items snapshot the name and price**, so a receipt from last month stays
-  accurate after a product is renamed or repriced. Deleting a product retires it
-  (`isActive: false`) rather than removing the row.
-- **Dark mode** follows the visitor's system setting with a manual override. `cream-*` and
-  `ink-*` flip between modes, `accent`/`positive`/`negative` flip so brand and status text
-  stays readable on both, and `paper-*`/`wine-*`/`gold-*` are pinned for fills and
-  always-dark chrome. See `CLAUDE.md` for which to reach for.
-
----
-
-## Client content checklist
-
-Everything below is **placeholder** and needs the client's real material before launch.
-Each item says exactly where it lives.
-
-- [ ] **Logo** — `src/components/BrandLogo.tsx` currently draws a stand-in roundel. Drop the
-      real file at `public/brand/logo.svg` and follow the swap instructions in the comment at
-      the top of that file. Nothing else needs to change.
-- [ ] **Photography** — all 56 images in `public/images/` are openly-licensed stand-ins,
-      credited in `public/images/CREDITS.md`. Replace a file **in place** (same path, same
-      name) and the site picks it up with no code change. This matters most on the home hero
-      (`feature/hero-main.jpg`) and the product shots.
-- [x] **Phone / WhatsApp** — `+250 787 458 190` is the client's real number and is already
-      wired into every `wa.me` and `tel:` link (`src/lib/bakery-info.ts`). Split
-      `phoneDisplay` from `whatsappNumber` in that file if calls should go to a different
-      line from WhatsApp.
-- [ ] **Remaining contact details** — `src/lib/bakery-info.ts`: email, address, map location
-      and social links are still invented.
-- [ ] **Opening hours and delivery zones** — same file. Confirm the zones and fees match
-      what the bakery actually charges.
-- [x] **Menu and prices** — `prisma/catalog.ts` now holds the client's **real** menu: 15
-      pastries, 9 celebration cakes and 5 boxes, at the recommended retail prices from
-      `IRIE_VIANDS_Pastry_and_Celebration_Cake_Menu.pdf`. Cake sizes and wedding tiers are
-      in as variants; flavours and wedding styles are in `src/lib/cake-options.ts`.
-      ⚠️ That file is the source of truth — **re-seeding deletes products added through
-      `/admin/products`**, so add anything permanent to the catalogue too.
-- [ ] **Product descriptions** — written to fit the range but not client-approved.
-- [ ] **Testimonials** — the three quotes on the home page are written, not real. They are in
-      the `TESTIMONIALS` array in `src/app/(site)/page.tsx`.
-- [ ] **Exchange rate** — `RWF_PER_USD` in `src/lib/currency.ts`.
-- [ ] **Staff account** — change the seeded password, or create the real owner account and
-      delete `owner@sweetcrust.rw`.
-- [ ] **`JWT_SECRET`** — set a long random value in production. The development fallback is
-      not safe to ship.
-- [ ] **Domain** — set `NEXT_PUBLIC_SITE_URL` so the sitemap, robots.txt and share cards
-      point at the real domain (currently defaults to `https://sweetcrust.rw`).
-
----
-
-## Not built yet
-
-Deliberately out of scope for this pass, in rough priority order:
-
-1. **Online payment.** Checkout saves the order and hands off to WhatsApp for confirmation
-   and payment — the way most Kigali bakeries already work, and it needs no merchant
-   account. MTN MoMo or Flutterwave can be added at `src/app/(site)/cart/actions.ts` without
-   disturbing the rest of the flow.
-2. **Customer accounts and order history** — ordering is guest-only today.
-3. **Email/SMS notifications** — the bakery currently learns about an order from the admin
-   dashboard or the customer's WhatsApp message.
-4. **Product reviews**, loyalty and subscription boxes.
-5. **French translation** — the site is English-only.
-
----
-
-## The static preview (GitHub Pages)
-
-A click-through copy of the site is published to GitHub Pages so the client can
-browse it without a server:
-
-**https://nkennyelvis.github.io/sweet-crust/**
-
-GitHub Pages serves static files only — it cannot run Server Actions, read cookies, or
-reach a database. So the preview build swaps those for stand-ins:
-
-| Live site | Static preview |
-| --- | --- |
-| Checkout saves an order | Shows a sample confirmation; nothing is stored |
-| Contact / custom-cake forms save | Show their success state only |
-| Staff login checks a password | Any details get you in |
-| Admin status toggles update the database | Rendered read-only |
-| Category / search / sort filter on the server | Filter in the browser |
-| Prices switch RWF ↔ USD via a cookie | RWF only |
-
-Everything else — every page, all 42 products, the cart, the photography — is the real
-thing. A gold banner across the top says so, and the browser cart genuinely works.
-
-Rebuild and republish it with:
-
-```bash
-npm run demo:deploy
-```
-
-That seeds sample orders and enquiries (`prisma/seed-demo.ts`) so the admin walkthrough
-isn't empty, builds with `DEMO_EXPORT=1`, and pushes `out/` to the `gh-pages` branch.
-The demo-only code lives in `src/demo/` and is switched on by `next.config.ts`; nothing
-in the normal build path changes.
-
-## Deploying
-
-Any Node host works. For a platform without a persistent disk (Vercel and similar), switch
-the Prisma datasource from `sqlite` to `postgresql` and point `DATABASE_URL` at a hosted
-database — no application code needs to change. Set `JWT_SECRET` and
-`NEXT_PUBLIC_SITE_URL`, then run the migration and seed once against the production
-database.
