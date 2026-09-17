@@ -6,9 +6,6 @@
 
 An all-in-one modern e-commerce platform and management portal for luxury bakery and confectionery businesses. Built with **Next.js**, **TypeScript**, **Tailwind CSS**, **Prisma ORM**, and **PostgreSQL**.
 
-<p>
-  <a href="https://misalstack.netlify.app/case-study/cream-case-study"><strong>View Live Case Study »</strong></a>
-</p>
 
 <p>
 
