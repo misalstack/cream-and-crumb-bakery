@@ -1,0 +1,268 @@
+@import "tailwindcss";
+
+:root {
+  --background: #1C1310;
+  --foreground: #F5EBE6;
+  --primary: #D4A373;
+  --secondary: #3D2B1F;
+
+  --color-wine-950: #2A211C;
+  --color-wine-900: #3A2B23;
+  --color-wine-800: #4A352A;
+  --color-wine-700: #604638;
+  --color-wine-600: #795744;
+  --color-wine-500: #9A6B4F;
+
+  --color-gold-600: #6F4B37;
+  --color-gold-500: #9A6B4F;
+  --color-gold-400: #B88F75;
+  --color-gold-300: #D8C2B0;
+
+  --color-blush-500: #C8A99A;
+  --color-blush-300: #E6D5CA;
+  --color-blush-100: #F3EBE5;
+
+  --color-accent: #9A6B4F;
+
+  --color-positive: #047857;
+  --color-negative: #b91c1c;
+
+  --color-cream-50: #1C1310;        /* Header BG */
+  --color-cream-100: #2B1D16;       /* Card BG */
+  --color-cream-200: #3D2B1F;
+
+  --color-paper-50: #fdf9f3;
+  --color-paper-100: #f7efe3;
+  --color-paper-200: #ebdfcd;
+
+  --color-ink-900: #F5EBE6;         /* Primary Text */
+  --color-ink-700: #D5C2B5;         /* Muted Text */
+
+  --color-surface: #2B1D16;
+}
+
+
+/* =========================================================
+   TAILWIND THEME VARIABLES
+   ========================================================= */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-border: var(--color-border);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-script: var(--font-script);
+
+  --color-wine-950: var(--color-wine-950);
+  --color-wine-900: var(--color-wine-900);
+  --color-wine-800: var(--color-wine-800);
+  --color-wine-700: var(--color-wine-700);
+  --color-wine-600: var(--color-wine-600);
+  --color-wine-500: var(--color-wine-500);
+
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-300: var(--color-gold-300);
+
+  --color-blush-500: var(--color-blush-500);
+  --color-blush-300: var(--color-blush-300);
+  --color-blush-100: var(--color-blush-100);
+
+  --color-accent: var(--color-accent);
+  --color-positive: var(--color-positive);
+  --color-negative: var(--color-negative);
+
+  --color-cream-50: var(--color-cream-50);
+  --color-cream-100: var(--color-cream-100);
+  --color-cream-200: var(--color-cream-200);
+
+  --color-paper-50: var(--color-paper-50);
+  --color-paper-100: var(--color-paper-100);
+  --color-paper-200: var(--color-paper-200);
+
+  --color-ink-900: var(--color-ink-900);
+  --color-ink-700: var(--color-ink-700);
+
+  --color-surface: var(--color-surface);
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+
+/* =========================================================
+   GOLD SECTION RULE
+   ========================================================= */
+
+.gold-rule {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-gold-400) 20%,
+    var(--color-gold-400) 80%,
+    transparent
+  );
+}
+
+
+/* =========================================================
+   FLOURISH
+   ========================================================= */
+
+.flourish {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flourish::before,
+.flourish::after {
+  content: "";
+  height: 1px;
+  width: 1.75rem;
+  background: currentColor;
+}
+
+
+/* =========================================================
+   KEYBOARD FOCUS
+   ========================================================= */
+
+:focus-visible {
+  outline: 2px solid var(--color-gold-500);
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* Light text for main website content */
+main h1,
+main h2,
+main h3,
+main h4,
+main p,
+main span,
+main label {
+  color: var(--foreground);
+}
+
+/* Muted descriptions */
+main p {
+  color: var(--color-ink-700);
+}
+/* Product/card headings */
+main h1,
+main h2,
+main h3,
+main h4 {
+  color: var(--color-ink-900);
+}
+/* =========================================================
+   LIGHT FORM BACKGROUND & CONTRAST FIX
+   ========================================================= */
+
+/* 1. Form Container Background Light Karein */
+main form:not([role="search"]),
+form{
+  background-color: #F7EFE8 !important;   /* Light cream/paper background */
+  border: 1px solid #EADCD0 !important;   /* Soft border */
+  border-radius: 1.5rem !important;
+  padding: 2.5rem !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3) !important;
+}
+
+div:has(> form:not([role="search"])){
+  background: transparent;
+  border: none;
+}
+
+/* 2. Top labels & All Labels Fix (Taake light BG par saaf dikhein) */
+main form label,
+form label {
+  color: #2A1810 !important;              /* Dark Brown text */
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  display: block !important;
+  margin-bottom: 0.4rem !important;
+}
+
+/* 3. Input Boxes Style */
+main form:not([role="search"]) input,
+main form:not([role="search"]) textarea,
+main form:not([role="search"]) select
+ {
+  background-color: #FFFFFF !important;   /* White input boxes */
+  color: #2A1810 !important;              /* Dark text */
+  border: 1px solid #D8C2B0 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1rem !important;
+  width: 100% !important;
+}
+
+/* 4. Placeholder Text Fix */
+main form input::placeholder,
+main form textarea::placeholder,
+form input::placeholder,
+form textarea::placeholder {
+  color: #8C7A6B !important;
+}
+
+/* =========================================================
+   SEARCH BAR RESET
+   ========================================================= */
+
+/* Search Input Box */
+input[type="search"],
+input[placeholder*="Search"] {
+  background-color: #FFFDF9 !important;
+  color: #2A1810 !important;
+  
+}
+
+/* Search Button & Filters Container Reset */
+form[role="search"],
+div:has(> input[type="search"]) {
+  background-color: transparent !important;
+}
+/* Search box ka outer border remove karne ke liye */
+div:has(> input[type="search"]),
+form[role="search"],
+div:has(> input[placeholder*="Search"]) {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+
+

@@ -1,0 +1,175 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// SQLite has no native enum type in Prisma, so the role/status/method fields
+// below are plain String columns validated against the unions in
+// src/lib/enums.ts.
+//
+// Money is stored in RWF as whole-franc Int (RWF has no minor unit in
+// practice). USD is derived at render time from RWF_PER_USD in
+// src/lib/currency.ts â€” never stored.
+
+model StaffUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("BAKER") // OWNER | MANAGER | BAKER
+  createdAt    DateTime @default(now())
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String
+  imageUrl    String
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  products Product[]
+}
+
+model Product {
+  id              String  @id @default(cuid())
+  name            String
+  slug            String  @unique
+  description     String // one-line card blurb
+  longDescription String // product page copy
+  priceRwf        Int
+  // Comma-separated paths under /public. First entry is the card image.
+  imageUrls       String
+  // Comma-separated, e.g. "Gluten,Dairy,Eggs" â€” shown on the product page.
+  allergens       String  @default("")
+  // What one unit is: "per loaf", "per 6 pieces", "8 inch round".
+  unit            String  @default("each")
+  // Hours of notice the kitchen needs; 0 means it's on the shelf today.
+  leadTimeHours   Int     @default(0)
+  isFeatured      Boolean @default(false)
+  isSoldOut       Boolean @default(false)
+  isActive        Boolean @default(true)
+  sortOrder       Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  variants   ProductVariant[]
+  orderItems OrderItem[]
+
+  @@index([categoryId])
+}
+
+/// Size/serving options for cakes â€” "6 inch / serves 8". Products with no
+/// variants are sold at the base `Product.priceRwf`.
+model ProductVariant {
+  id        String @id @default(cuid())
+  name      String
+  priceRwf  Int
+  sortOrder Int    @default(0)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model Order {
+  id          String @id @default(cuid())
+  /// Human-friendly reference shown to the customer, e.g. "SC-7K3M2A".
+  orderNumber String @unique
+
+  customerName  String
+  customerPhone String
+  customerEmail String?
+
+  fulfillment    String // PICKUP | DELIVERY
+  deliveryZone   String? // DELIVERY only â€” see DELIVERY_ZONES in bakery-info.ts
+  deliveryFeeRwf Int     @default(0)
+  address        String?
+
+  requestedDate DateTime
+  timeWindow    String
+  notes         String?
+
+  subtotalRwf Int
+  totalRwf    Int
+  status      String @default("PENDING") // PENDING | CONFIRMED | BAKING | READY | OUT_FOR_DELIVERY | COMPLETED | CANCELLED
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items OrderItem[]
+
+  @@index([status, requestedDate])
+  @@index([createdAt])
+}
+
+/// Name and price are snapshotted so past orders stay accurate after the
+/// product is renamed, repriced or deleted.
+model OrderItem {
+  id            String  @id @default(cuid())
+  nameSnapshot  String
+  variantName   String?
+  unitPriceRwf  Int
+  quantity      Int
+  lineTotalRwf  Int
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+}
+
+model CustomCakeRequest {
+  id          String    @id @default(cuid())
+  name        String
+  phone       String
+  email       String?
+  occasion    String
+  eventDate   DateTime?
+  servings    Int?
+  flavour     String?
+  budgetRwf   Int?
+  description String
+  status      String    @default("NEW") // NEW | CONTACTED | QUOTED | CLOSED
+  createdAt   DateTime  @default(now())
+
+  @@index([status, createdAt])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([isRead, createdAt])
+}
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  caption   String
+  tag       String   @default("bakery") // free-form filter chip: cakes | breads | pastries | bakery
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
